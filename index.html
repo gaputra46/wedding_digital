@@ -1,0 +1,846 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Wedding Of Ardy & Ana</title>
+    
+    <!-- FAVICON -->
+    <link rel="icon" type="image/png" href="favicon.png?v=2">
+    <link rel="apple-touch-icon" href="favicon.png?v=2">
+    
+    <!-- META TAGS KHUSUS PREVIEW WHATSAPP & MEDIA SOSIAL -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="The Wedding Of Ardy & Ana" />
+    <meta property="og:description" content="Atas Asung Kertha Wara Nugraha, kami mengundang Bapak/Ibu/Saudara/i untuk menghadiri Acara Pernikahan kami. Klik untuk info selengkapnya." />
+    <meta property="og:image" content="https://ardyputrawan76-sketch.github.io/wedding/bgt-cover.jpg" />
+    <meta property="og:image:secure_url" content="https://ardyputrawan76-sketch.github.io/wedding/bgt-cover.jpg" />
+    <meta property="og:image:type" content="image/jpeg" />
+    <meta property="og:image:width" content="600" />
+    <meta property="og:image:height" content="400" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+    
+    <style>
+        html { scroll-behavior: smooth; }
+        body { 
+            margin: 0; padding: 0; 
+            background-color: #0c0907;
+            background-image: linear-gradient(90deg, rgba(30,22,17,0.4) 1px, transparent 1px),
+                              linear-gradient(rgba(30,22,17,0.4) 1px, transparent 1px);
+            background-size: 20px 20px;
+            overflow-x: hidden; 
+            overflow-y: hidden; /* Terkunci sementara sebelum cover dibuka */
+            font-family: 'Montserrat', sans-serif; 
+            position: relative;
+            color: #f3e5ab;
+        }
+
+        /* --- BACKGROUND UKIRAN BUNGA BALI ELEGAN (PARALLAX) --- */
+        .ukiran-container {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100vw; height: 100vh;
+            pointer-events: none;
+            z-index: 1;
+            overflow: hidden;
+        }
+
+        .ukiran-bunga-bali {
+            position: absolute;
+            width: clamp(180px, 38vw, 320px);
+            opacity: 0.65;
+            filter: drop-shadow(2px 4px 8px rgba(212, 175, 55, 0.2));
+            will-change: transform;
+            transition: transform 0.08s cubic-bezier(0.1, 1, 0.1, 1);
+        }
+
+        .ub-top-left { top: -25px; left: -25px; }
+        .ub-top-right { top: 5vh; right: -25px; transform: scaleX(-1); }
+        .ub-mid-left { top: 40vh; left: -30px; }
+        .ub-bot-right { top: 68vh; right: -30px; transform: scaleX(-1); }
+
+        /* Cover Layar Penuh */
+        #cover {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
+            background: linear-gradient(rgba(12, 9, 7, 0.85), rgba(12, 9, 7, 0.85)), url('bg-cover.jpg') no-repeat center center/cover;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            color: #fff; text-align: center; z-index: 9999; padding: 20px;
+            box-sizing: border-box;
+            transition: transform 1.2s cubic-bezier(0.77, 0, 0.175, 1), opacity 1.2s ease;
+        }
+
+        #cover.opened {
+            transform: translateY(-100vh);
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .wedding-title {
+            font-family: 'Great Vibes', cursive;
+            font-size: 3.5rem;
+            color: #f3e5ab;
+            margin: 15px 0;
+            text-shadow: 2px 2px 6px rgba(212, 175, 55, 0.4);
+        }
+
+        .guest-box {
+            background: rgba(30, 22, 17, 0.7);
+            backdrop-filter: blur(5px);
+            padding: 15px 25px;
+            border-radius: 10px;
+            border: 1px solid rgba(212, 175, 55, 0.4);
+            margin: 20px 0;
+        }
+
+        .guest-name {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #f3e5ab;
+            margin-top: 5px;
+        }
+
+        .btn-open {
+            background: linear-gradient(135deg, #d4af37, #aa7c11);
+            color: #0c0907;
+            border: none;
+            padding: 12px 30px;
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: 25px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);
+            transition: 0.3s;
+        }
+        .btn-open:hover {
+            transform: scale(1.05);
+            opacity: 0.9;
+        }
+
+        /* KONTEN UTAMA */
+        #main-content { 
+            padding: 0 0 40px 0; text-align: center; max-width: 600px; margin: 0 auto; 
+            opacity: 0; transform: translateY(30px);
+            transition: opacity 1.2s ease, transform 1.2s cubic-bezier(0.215, 0.610, 0.355, 1); 
+            position: relative;
+            z-index: 10;
+        }
+
+        #main-content.muncul-konten {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .content-padding { padding: 20px; }
+        img { max-width: 100%; height: auto; }
+        
+        .pembatas { 
+            border: 0; height: 1px; 
+            background: linear-gradient(to right, transparent, #d4af37, transparent); 
+            margin: 40px 0; 
+        }
+
+        .hero-foto {
+            width: 100%;
+            height: 45vh;
+            max-height: 420px;
+            overflow: hidden;
+            border-bottom-left-radius: 30px;
+            border-bottom-right-radius: 30px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
+            margin-bottom: 30px;
+            cursor: pointer;
+            position: relative;
+            border-bottom: 2px solid #d4af37;
+        }
+
+        .hero-foto img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transform: scale(1.15);
+            transition: transform 8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+        
+        #main-content.muncul-konten .hero-foto img {
+            transform: scale(1);
+        }
+
+        .salam-arab { font-family: 'Great Vibes', cursive; font-size: 2.5rem; color: #f3e5ab; margin-bottom: 10px; }
+        .salam-teks { font-size: 0.9rem; color: #e2d2ba; line-height: 1.6; }
+        
+        .section-mempelai { display: flex; flex-direction: column; align-items: center; gap: 25px; margin-top: 30px; }
+        
+        .mempelai-card { 
+            width: 100%; max-width: 280px; background: rgba(20, 15, 12, 0.85); padding: 20px; 
+            border-radius: 15px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6); 
+            border: 1px solid rgba(212, 175, 55, 0.3); box-sizing: border-box;
+            backdrop-filter: blur(4px);
+        }
+        
+        .avatar-frame { 
+            width: clamp(140px, 45vw, 200px); 
+            height: clamp(140px, 45vw, 200px); 
+            margin: 0 auto 15px; 
+            border-radius: 50%; 
+            overflow: hidden; 
+            border: 3px solid #d4af37; 
+            box-shadow: 0 0 15px rgba(212, 175, 55, 0.3); 
+            cursor: pointer; 
+        }
+        .avatar-frame img { width: 100%; height: 100%; object-fit: cover; }
+        
+        .nama-lengkap { font-size: clamp(0.95rem, 4vw, 1.2rem); font-weight: 600; color: #f3e5ab; margin: 10px 0 5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .info-ortu { font-size: 0.8rem; color: #c4b299; line-height: 1.4; }
+        .dan-simbol { font-family: 'Great Vibes', cursive; font-size: 2rem; color: #d4af37; }
+
+        .timer-container { display: flex; justify-content: center; gap: 15px; margin-top: 15px; }
+        .timer-box { background: rgba(20, 15, 12, 0.85); width: 65px; padding: 10px 5px; border-radius: 8px; border: 1px solid rgba(212, 175, 55, 0.3); box-shadow: 0 4px 10px rgba(0,0,0,0.5); backdrop-filter: blur(4px); }
+        .timer-box span { font-size: 1.3rem; font-weight: 600; color: #f3e5ab; display: block; }
+        .timer-box p { font-size: 0.7rem; color: #c4b299; margin: 2px 0 0; }
+        
+        .section-acara { background-color: rgba(20, 15, 12, 0.85); padding: 35px 25px; border-radius: 15px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6); border: 1px solid rgba(212, 175, 55, 0.3); backdrop-filter: blur(4px); }
+        .acara-title { font-family: 'Great Vibes', cursive; font-size: 2.5rem; color: #f3e5ab; margin-bottom: 15px; }
+        .btn-maps { display: inline-block; background: transparent; color: #f3e5ab; border: 1px solid #d4af37; text-decoration: none; padding: 10px 20px; border-radius: 25px; font-size: 0.85rem; margin-top: 10px; transition: 0.3s; font-weight: 600; }
+        .btn-maps:hover { background: #d4af37; color: #0c0907; transform: scale(1.03); }
+
+        .section-galeri { background-color: rgba(20, 15, 12, 0.85); padding: 35px 20px; border-radius: 15px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6); position: relative; border: 1px solid rgba(212, 175, 55, 0.3); backdrop-filter: blur(4px); }
+        .galeri-wrapper { position: relative; margin-top: 20px; display: flex; align-items: center; }
+        .galeri-slider { display: flex; gap: 15px; overflow-x: auto; scroll-snap-type: x mandatory; scroll-behavior: smooth; padding: 5px 5px 15px 5px; -webkit-overflow-scrolling: touch; }
+        .galeri-slider::-webkit-scrollbar { display: none; }
+        
+        .galeri-item { 
+            flex: 0 0 85%; 
+            scroll-snap-align: center; 
+            height: 280px; /* Optimal untuk landscape */
+            overflow: hidden; 
+            border-radius: 12px; 
+            border: 1px solid rgba(212, 175, 55, 0.4); 
+            box-shadow: 0 6px 15px rgba(0,0,0,0.5); 
+            cursor: pointer; 
+            background: #111;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .galeri-item img { 
+            width: 100%; 
+            height: 100%; 
+            object-fit: cover; 
+            transition: transform 0.4s ease; 
+        }
+
+        .slide-btn { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(212, 175, 55, 0.9); color: #0c0907; border: none; width: 38px; height: 38px; border-radius: 50%; font-size: 1rem; cursor: pointer; z-index: 10; display: flex; justify-content: center; align-items: center; box-shadow: 0 3px 10px rgba(0,0,0,0.5); }
+        .btn-left { left: -12px; }
+        .btn-right { right: -12px; }
+        .slider-dots { display: flex; justify-content: center; gap: 6px; margin-top: 8px; flex-wrap: wrap; max-width: 90%; margin-left: auto; margin-right: auto; }
+        .dot { width: 6px; height: 6px; background-color: #555; border-radius: 50%; transition: 0.3s; cursor: pointer; }
+        .dot.active { background-color: #d4af37; width: 16px; border-radius: 4px; }
+
+        #lightbox-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-color: rgba(5, 4, 3, 0.96); z-index: 10000;
+            display: flex; justify-content: center; align-items: center;
+            opacity: 0; pointer-events: none; transition: opacity 0.4s ease;
+        }
+        #lightbox-overlay.active { opacity: 1; pointer-events: auto; }
+        .lightbox-container { position: relative; width: 90%; max-width: 500px; display: flex; flex-direction: column; align-items: center; }
+        #lightbox-img { max-width: 100%; max-height: 75vh; border-radius: 8px; box-shadow: 0 10px 25px rgba(212, 175, 55, 0.2); transform: scale(0.9); transition: transform 0.4s ease, opacity 0.3s ease; border: 1px solid rgba(212, 175, 55, 0.4); }
+        #lightbox-overlay.active #lightbox-img { transform: scale(1); }
+        
+        .lightbox-arrow { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(212, 175, 55, 0.2); color: #f3e5ab; border: 1px solid #d4af37; width: 45px; height: 45px; border-radius: 50%; font-size: 1.5rem; cursor: pointer; display: flex; justify-content: center; align-items: center; transition: 0.3s; z-index: 10002; }
+        .lightbox-arrow:hover { background: #d4af37; color: #0c0907; }
+        .lightbox-prev { left: -20px; }
+        .lightbox-next { right: -20px; }
+        .lightbox-close { position: absolute; top: -45px; right: 0; color: #f3e5ab; font-size: 2rem; background: none; border: none; cursor: pointer; }
+        .lightbox-hint { color: #a89f91; font-size: 0.8rem; letter-spacing: 1px; margin-top: 15px; text-align: center; }
+
+        .section-kado { background-color: rgba(20, 15, 12, 0.85); padding: 35px 25px; border-radius: 15px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6); border: 1px solid rgba(212, 175, 55, 0.3); backdrop-filter: blur(4px); }
+        
+        .section-rsvp { background-color: rgba(20, 15, 12, 0.85); padding: 35px 25px; border-radius: 15px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6); border: 1px solid rgba(212, 175, 55, 0.3); text-align: left; backdrop-filter: blur(4px); }
+        .rsvp-inputs { display: flex; flex-direction: column; gap: 15px; margin-top: 20px; }
+        .rsvp-inputs input, .rsvp-inputs select, .rsvp-inputs textarea { width: 100%; padding: 12px; border: 1px solid rgba(212, 175, 55, 0.3); border-radius: 8px; font-family: inherit; font-size: 0.9rem; background-color: rgba(10, 8, 6, 0.8); box-sizing: border-box; color: #fff; }
+        .rsvp-inputs input:focus, .rsvp-inputs select:focus, .rsvp-inputs textarea:focus { outline: none; border-color: #d4af37; }
+        .btn-submit { background: linear-gradient(135deg, #d4af37, #aa7c11); color: #0c0907; border: none; width: 100%; padding: 12px; border-radius: 8px; font-size: 1rem; font-weight: 600; cursor: pointer; transition: 0.3s; }
+        .btn-submit:hover { opacity: 0.9; }
+
+        #music-control { position: fixed; bottom: 25px; right: 25px; width: 50px; height: 50px; background: linear-gradient(135deg, #d4af37, #aa7c11); color: #0c0907; border-radius: 50%; display: flex; justify-content: center; align-items: center; z-index: 999; cursor: pointer; box-shadow: 0 4px 15px rgba(212, 175, 55, 0.4); font-size: 1.2rem; animation: putarMusik 4s linear infinite; animation-play-state: paused; }
+        @keyframes putarMusik { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+        .scroll-animasi { opacity: 0; transform: scale(0.92) translateY(30px); transition: opacity 0.8s ease, transform 0.8s cubic-bezier(0.215, 0.610, 0.355, 1); }
+        .scroll-animasi.muncul { opacity: 1; transform: scale(1) translateY(0); }
+
+        .teks-timbul-atm {
+            color: #f3e5ab !important;
+            font-family: 'Courier New', Courier, monospace;
+            font-weight: bold;
+            text-shadow: -1px -1px 0px rgba(0, 0, 0, 0.8), 
+                          1px 1px 1px rgba(255, 255, 255, 0.2),
+                          1px 2px 3px rgba(0, 0, 0, 0.9);
+            letter-spacing: 2px !important;
+        }
+
+        .logo-bpd-bali { display: flex; align-items: center; gap: 5px; }
+        .icon-bpd {
+            position: relative; width: 16px; height: 16px; background-color: #d4af37; border-radius: 50%;
+            display: flex; justify-content: center; align-items: center;
+        }
+        .icon-bpd::after {
+            content: ""; width: 0; height: 0;
+            border-left: 5px solid transparent; border-right: 5px solid transparent;
+            border-bottom: 9px solid #000; position: absolute; top: 3px;
+        }
+        .teks-bpd { font-weight: 800; font-size: clamp(0.85rem, 3.5vw, 0.95rem); letter-spacing: 0.5px; color: #f3e5ab; }
+
+        @media (min-width: 600px) { .mempelai-card { max-width: 340px; padding: 25px; } }
+        @media (min-width: 768px) {
+            .section-mempelai { flex-direction: row; justify-content: space-around; gap: 15px; align-items: center; }
+            .mempelai-card { max-width: 320px; padding: 25px 20px; }
+            .galeri-item { flex: 0 0 48%; height: 260px; } 
+            .hero-foto { height: 450px; max-height: 450px; }
+            .lightbox-prev { left: -50px; }
+            .lightbox-next { right: -50px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="ukiran-container">
+        <!-- Ukiran Bunga Bali Sudut Kiri Atas -->
+        <svg class="ukiran-bunga-bali ub-top-left" data-speed="0.3" viewBox="0 0 220 220" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M10 10 C60 10 120 40 140 90 C160 140 120 180 70 190 C30 195 10 170 25 145 C40 120 80 130 75 100 C70 70 30 50 10 10 Z" fill="#9c7c2c"/>
+            <path d="M10 10 Q50 60 90 40 Q130 20 150 70 Q170 120 120 130 Q70 140 40 100 Z" fill="#f3e5ab" opacity="0.8"/>
+            <circle cx="75" cy="75" r="14" fill="#1c150e"/>
+            <circle cx="75" cy="75" r="8" fill="#fff"/>
+            <path d="M75 90 C100 130 140 150 180 130 C150 170 90 160 75 90 Z" fill="#d4af37" opacity="0.9"/>
+            <path d="M90 75 C130 100 160 70 190 100 C160 130 120 110 90 75 Z" fill="#d4af37" opacity="0.7"/>
+        </svg>
+
+        <!-- Ukiran Bunga Bali Sudut Kanan Atas -->
+        <svg class="ukiran-bunga-bali ub-top-right" data-speed="-0.25" viewBox="0 0 220 220" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M10 10 C60 10 120 40 140 90 C160 140 120 180 70 190 C30 195 10 170 25 145 C40 120 80 130 75 100 C70 70 30 50 10 10 Z" fill="#9c7c2c"/>
+            <path d="M10 10 Q50 60 90 40 Q130 20 150 70 Q170 120 120 130 Q70 140 40 100 Z" fill="#f3e5ab" opacity="0.8"/>
+            <circle cx="75" cy="75" r="14" fill="#1c150e"/>
+            <circle cx="75" cy="75" r="8" fill="#fff"/>
+            <path d="M75 90 C100 130 140 150 180 130 C150 170 90 160 75 90 Z" fill="#d4af37" opacity="0.9"/>
+            <path d="M90 75 C130 100 160 70 190 100 C160 130 120 110 90 75 Z" fill="#d4af37" opacity="0.7"/>
+        </svg>
+
+        <!-- Ukiran Bunga Bali Samping Tengah Kiri -->
+        <svg class="ukiran-bunga-bali ub-mid-left" data-speed="0.2" viewBox="0 0 220 220" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M10 10 C60 10 120 40 140 90 C160 140 120 180 70 190 C30 195 10 170 25 145 C40 120 80 130 75 100 C70 70 30 50 10 10 Z" fill="#9c7c2c"/>
+            <path d="M10 10 Q50 60 90 40 Q130 20 150 70 Q170 120 120 130 Q70 140 40 100 Z" fill="#f3e5ab" opacity="0.8"/>
+            <circle cx="75" cy="75" r="14" fill="#1c150e"/>
+            <circle cx="75" cy="75" r="8" fill="#fff"/>
+            <path d="M75 90 C100 130 140 150 180 130 C150 170 90 160 75 90 Z" fill="#d4af37" opacity="0.9"/>
+        </svg>
+
+        <!-- Ukiran Bunga Bali Samping Bawah Kanan -->
+        <svg class="ukiran-bunga-bali ub-bot-right" data-speed="-0.35" viewBox="0 0 220 220" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M10 10 C60 10 120 40 140 90 C160 140 120 180 70 190 C30 195 10 170 25 145 C40 120 80 130 75 100 C70 70 30 50 10 10 Z" fill="#9c7c2c"/>
+            <path d="M10 10 Q50 60 90 40 Q130 20 150 70 Q170 120 120 130 Q70 140 40 100 Z" fill="#f3e5ab" opacity="0.8"/>
+            <circle cx="75" cy="75" r="14" fill="#1c150e"/>
+            <circle cx="75" cy="75" r="8" fill="#fff"/>
+            <path d="M75 90 C100 130 140 150 180 130 C150 170 90 160 75 90 Z" fill="#d4af37" opacity="0.9"/>
+        </svg>
+    </div>
+
+    <audio id="bg-music" src="musik-pernikahan.mp3" loop></audio>
+    <div id="music-control" onclick="toggleMusik()">🎵</div>
+
+    <div id="lightbox-overlay" onclick="tutupFotoLuar(event)">
+        <div class="lightbox-container">
+            <button class="lightbox-close" onclick="tutupFoto()">&times;</button>
+            <button class="lightbox-arrow lightbox-prev" onclick="navigasiLightbox(-1, event)">❮</button>
+            <img id="lightbox-img" src="" alt="Foto Diperbesar">
+            <button class="lightbox-arrow lightbox-next" onclick="navigasiLightbox(1, event)">❯</button>
+            <p class="lightbox-hint">Ketuk area gelap atau tombol silang untuk keluar</p>
+        </div>
+    </div>
+
+    <div id="cover">
+        <p style="letter-spacing: 3px; font-size: 0.8rem; font-weight:600; color:#c4b299;">THE WEDDING OF</p>
+        <h1 class="wedding-title">Ardy & Ana</h1>
+        <div class="guest-box">
+            <p style="font-size: 0.85rem; font-style: italic; margin:0; color:#eee;">Kepada Yth. Bapak/Ibu/Saudara/i:</p>
+            <h2 id="nama-tamu" class="guest-name">Tamu Undangan</h2>
+        </div>
+        <button class="btn-open" onclick="bukaUndangan()">Buka Undangan</button>
+    </div>
+
+    <div id="main-content">
+        <div id="foto-pembuka" class="hero-foto" onclick="bukaSingleLightbox('bg-cover.jpg')">
+            <img src="bg-cover.jpg" alt="Foto Berdua Ardy & Ana" onerror="this.src='https://placehold.co/600x420/1a120b/f3e5ab?text=Ardy+%26+Ana'">
+        </div>
+
+        <div class="content-padding">
+            <section class="section-salam scroll-animasi">
+                <p class="salam-arab" style="margin-top: 15px; font-size: 2.2rem; text-shadow: 0 2px 4px rgba(0,0,0,0.8);">Om Swastyastu</p>
+                <div style="background: rgba(15, 11, 8, 0.82); padding: 18px; border-radius: 12px; border: 1px solid rgba(212, 175, 55, 0.35); backdrop-filter: blur(6px); box-shadow: 0 4px 15px rgba(0,0,0,0.6);">
+                    <p class="salam-teks" style="color: #f3e5ab; margin: 0; text-shadow: 0 1px 2px rgba(0,0,0,0.5);">Atas Asung Kertha Wara Nugraha Ida Sang Hyang Widhi Wasa/Tuhan Yang Maha Esa, kami mengundang Bapak/Ibu/Saudara/i untuk menghadiri Acara Pernikahan kami:</p>
+                </div>
+            </section>
+
+            <section class="section-mempelai">
+                <div class="mempelai-card scroll-animasi">
+                    <div class="avatar-frame" onclick="bukaSingleLightbox('ardy.png')">
+                        <img src="ardy.png" alt="Foto Ardy" onerror="this.src='https://placehold.co/200x200/1a120b/f3e5ab?text=Gede+Ardy'">
+                    </div>
+                    <h3 class="nama-lengkap">Gede Ardy Putrawan</h3>
+                    <p class="info-ortu">Putra dari Pasangan:<br>Bapak Ketut Sariana (Alm.)<br>& Ibu Ketut Arsih</p>
+                </div>
+                <div class="dan-simbol">&</div>
+                <div class="mempelai-card scroll-animasi">
+                    <div class="avatar-frame" onclick="bukaSingleLightbox('ana.png')">
+                        <img src="ana.png" alt="Foto Ana" onerror="this.src='https://placehold.co/200x200/1a120b/f3e5ab?text=Komang+Ana'">
+                    </div>
+                    <h3 class="nama-lengkap">Ni Komang Ana Oktaviani</h3>
+                    <p class="info-ortu">Putri dari Pasangan:<br>Bapak I Wayan Sugiantara<br>& Ibu Ni Ketut Wartini</p>
+                </div>
+            </section>
+
+            <hr class="pembatas">
+
+            <section class="section-countdown scroll-animasi">
+                <h4 style="font-size: 0.85rem; letter-spacing: 2px; margin: 0 0 15px 0; color: #f3e5ab; font-weight:600;">MENUJU HARI BAHAGIA</h4>
+                <div class="timer-container">
+                    <div class="timer-box"><span id="days">00</span><p>Hari</p></div>
+                    <div class="timer-box"><span id="hours">00</span><p>Jam</p></div>
+                    <div class="timer-box"><span id="minutes">00</span><p>Menit</p></div>
+                    <div class="timer-box"><span id="seconds">00</span><p>Detik</p></div>
+                </div>
+                <div style="margin-top: 20px;">
+                    <a href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=The+Wedding+Of+Ardy+%26+Ana&dates=20261231T010000Z/20261231T100000Z&details=Acara+Pawiwahan+Gede+Ardy+Putrawan+%26+Ni+Komang+Ana+Oktaviani&location=Tabanan,+Bali" target="_blank" style="display:inline-block; background:linear-gradient(135deg,#d4af37,#aa7c11); color:#0c0907; text-decoration:none; padding:10px 20px; border-radius:25px; font-size:0.85rem; font-weight:600; box-shadow:0 4px 10px rgba(212,175,55,0.3);">📅 Simpan ke Kalender</a>
+                </div>
+            </section>
+
+            <hr class="pembatas">
+
+            <section class="section-acara scroll-animasi">
+                <h2 class="acara-title">Pawiwahan / Acara</h2>
+                <p style="font-weight: 600; margin: 0 0 5px 0; color: #f3e5ab;">Hari, Tanggal</p>
+                <p style="color: #c4b299; font-size: 0.9rem; margin: 0 0 20px 0;">Kamis, 31 Desember 2026</p>
+                <p style="font-weight: 600; margin: 0 0 5px 0; color: #f3e5ab;">Waktu</p>
+                <p style="color: #c4b299; font-size: 0.9rem; margin: 0 0 20px 0;">09.00 WITA - Selesai</p>
+                <p style="font-weight: 600; margin: 0 0 5px 0; color: #f3e5ab;">Tempat / Lokasi</p>
+                <p id="alamat-lokasi" style="color: #c4b299; font-size: 0.9rem; padding: 0 20px; margin: 0 0 10px 0;">Kediaman Mempelai Pria, Tabanan, Bali</p>
+                
+                <div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-top: 15px;">
+                    <a href="https://goo.gl/maps/bz8HRTQSsVTxnEum9" target="_blank" class="btn-maps">📍 Buka Google Maps</a>
+                    <button onclick="salinAlamat()" class="btn-maps" style="background: transparent; cursor: pointer;">📋 <span id="btn-alamat-text">Salin Alamat</span></button>
+                </div>
+            </section>
+
+            <hr class="pembatas">
+
+            <section class="section-galeri scroll-animasi">
+                <h3 style="font-family: 'Great Vibes', cursive; font-size: 2.5rem; color: #f3e5ab; margin: 0 0 5px 0;">Galeri Kebersamaan</h3>
+                <p style="font-size: 0.8rem; color: #c4b299; margin: 0 0 5px 0;">Kisah cinta dalam bingkai potret kebahagiaan kami (15 Foto)</p>
+                <p style="font-size: 0.7rem; color: #d4af37; font-style: italic; margin: 0;">(Sangat cocok untuk foto landscape/mendatar)</p>
+
+                <div class="galeri-wrapper">
+                    <button class="slide-btn btn-left" onclick="geserGaleri(-1)">❮</button>
+                    <div class="galeri-slider" id="sliderGaleri" onscroll="perbaruiTitikIndikator()">
+                        <div class="galeri-item" onclick="bukaGaleriLightbox(0)"><img src="galeri1.jpg" alt="Foto 1" onerror="this.src='https://placehold.co/500x300/1a120b/f3e5ab?text=Galeri+1'"></div>
+                        <div class="galeri-item" onclick="bukaGaleriLightbox(1)"><img src="galeri2.jpg" alt="Foto 2" onerror="this.src='https://placehold.co/500x300/1a120b/f3e5ab?text=Galeri+2'"></div>
+                        <div class="galeri-item" onclick="bukaGaleriLightbox(2)"><img src="galeri3.jpg" alt="Foto 3" onerror="this.src='https://placehold.co/500x300/1a120b/f3e5ab?text=Galeri+3'"></div>
+                        <div class="galeri-item" onclick="bukaGaleriLightbox(3)"><img src="galeri4.jpg" alt="Foto 4" onerror="this.src='https://placehold.co/500x300/1a120b/f3e5ab?text=Galeri+4'"></div>
+                        <div class="galeri-item" onclick="bukaGaleriLightbox(4)"><img src="galeri5.jpg" alt="Foto 5" onerror="this.src='https://placehold.co/500x300/1a120b/f3e5ab?text=Galeri+5'"></div>
+                        <div class="galeri-item" onclick="bukaGaleriLightbox(5)"><img src="galeri6.jpg" alt="Foto 6" onerror="this.src='https://placehold.co/500x300/1a120b/f3e5ab?text=Galeri+6'"></div>
+                        <div class="galeri-item" onclick="bukaGaleriLightbox(6)"><img src="galeri7.jpg" alt="Foto 7" onerror="this.src='https://placehold.co/500x300/1a120b/f3e5ab?text=Galeri+7'"></div>
+                        <div class="galeri-item" onclick="bukaGaleriLightbox(7)"><img src="galeri8.jpg" alt="Foto 8" onerror="this.src='https://placehold.co/500x300/1a120b/f3e5ab?text=Galeri+8'"></div>
+                        <div class="galeri-item" onclick="bukaGaleriLightbox(8)"><img src="galeri9.jpg" alt="Foto 9" onerror="this.src='https://placehold.co/500x300/1a120b/f3e5ab?text=Galeri+9'"></div>
+                        <div class="galeri-item" onclick="bukaGaleriLightbox(9)"><img src="galeri10.jpg" alt="Foto 10" onerror="this.src='https://placehold.co/500x300/1a120b/f3e5ab?text=Galeri+10'"></div>
+                        <div class="galeri-item" onclick="bukaGaleriLightbox(10)"><img src="galeri11.jpg" alt="Foto 11" onerror="this.src='https://placehold.co/500x300/1a120b/f3e5ab?text=Galeri+11'"></div>
+                        <div class="galeri-item" onclick="bukaGaleriLightbox(11)"><img src="galeri12.jpg" alt="Foto 12" onerror="this.src='https://placehold.co/500x300/1a120b/f3e5ab?text=Galeri+12'"></div>
+                        <div class="galeri-item" onclick="bukaGaleriLightbox(12)"><img src="galeri13.jpg" alt="Foto 13" onerror="this.src='https://placehold.co/500x300/1a120b/f3e5ab?text=Galeri+13'"></div>
+                        <div class="galeri-item" onclick="bukaGaleriLightbox(13)"><img src="galeri14.jpg" alt="Foto 14" onerror="this.src='https://placehold.co/500x300/1a120b/f3e5ab?text=Galeri+14'"></div>
+                        <div class="galeri-item" onclick="bukaGaleriLightbox(14)"><img src="galeri15.jpg" alt="Foto 15" onerror="this.src='https://placehold.co/500x300/1a120b/f3e5ab?text=Galeri+15'"></div>
+                    </div>
+                    <button class="slide-btn btn-right" onclick="geserGaleri(1)">❯</button>
+                </div>
+
+                <div class="slider-dots" id="wadahDots">
+                    <span class="dot active" onclick="lompatKeFoto(0)"></span>
+                    <span class="dot" onclick="lompatKeFoto(1)"></span>
+                    <span class="dot" onclick="lompatKeFoto(2)"></span>
+                    <span class="dot" onclick="lompatKeFoto(3)"></span>
+                    <span class="dot" onclick="lompatKeFoto(4)"></span>
+                    <span class="dot" onclick="lompatKeFoto(5)"></span>
+                    <span class="dot" onclick="lompatKeFoto(6)"></span>
+                    <span class="dot" onclick="lompatKeFoto(7)"></span>
+                    <span class="dot" onclick="lompatKeFoto(8)"></span>
+                    <span class="dot" onclick="lompatKeFoto(9)"></span>
+                    <span class="dot" onclick="lompatKeFoto(10)"></span>
+                    <span class="dot" onclick="lompatKeFoto(11)"></span>
+                    <span class="dot" onclick="lompatKeFoto(12)"></span>
+                    <span class="dot" onclick="lompatKeFoto(13)"></span>
+                    <span class="dot" onclick="lompatKeFoto(14)"></span>
+                </div>
+            </section>
+
+            <hr class="pembatas">
+
+            <section class="section-kado scroll-animasi">
+                <h3 style="font-family: 'Great Vibes', cursive; font-size: 2.5rem; color: #f3e5ab; margin: 0;">Kado Digital</h3>
+                <p style="font-size: 0.85rem; color: #c4b299; line-height: 1.5; margin-top: 10px;">
+                    Doa restu Anda merupakan karunia terindah bagi kami. Namun jika ingin memberikan tanda kasih, Anda dapat mentransfer melalui rekening di bawah ini:
+                </p>
+
+                <div class="atm-card" style="
+                    background: linear-gradient(135deg, #1a1510 0%, #0a0705 50%, #15110d 100%);
+                    color: white;
+                    padding: clamp(14px, 4vw, 18px);
+                    border-radius: 14px;
+                    width: 100%;
+                    max-width: 300px;
+                    box-sizing: border-box;
+                    margin: 20px auto;
+                    text-align: left;
+                    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.8);
+                    position: relative;
+                    overflow: hidden;
+                    font-family: 'Montserrat', sans-serif;
+                    border: 1px solid rgba(212, 175, 55, 0.4);
+                ">
+                    <div style="position: absolute; bottom: 0; left: 0; width: 100%; height: 5px; background: linear-gradient(90deg, #b8860b, #e6ca65, #b8860b);"></div>
+                    <div style="position: absolute; bottom: -20%; right: -10%; width: 140px; height: 140px; background: radial-gradient(circle, rgba(212,175,55,0.1) 0%, transparent 75%); border-radius: 50%;"></div>
+                    
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 22px;">
+                        <div class="logo-bpd-bali">
+                            <div class="icon-bpd"></div>
+                            <span class="teks-bpd">BPD BALI</span>
+                        </div>
+                        <div style="width: 32px; height: 24px; background: linear-gradient(135deg, #f3e5ab 0%, #d4af37 50%, #aa7c11 100%); border-radius: 4px; border: 1px solid rgba(255,255,255,0.25); box-shadow: inset 0 1px 2px rgba(0,0,0,0.2);"></div>
+                    </div>
+
+                    <p style="margin: 0; font-size: 0.6rem; color: #a89f91; letter-spacing: 0.5px; font-weight: 600;">NOMOR REKENING</p>
+                    <div style="display: flex; align-items: center; justify-content: space-between; margin: 3px 0 14px 0; gap: 4px;">
+                        <span class="teks-timbul-atm" style="font-size: clamp(0.95rem, 3.8vw, 1.1rem); white-space: nowrap;">057 0205 00004 1</span>
+                        <button onclick="copyNoRek()" style="
+                            background: rgba(212, 175, 55, 0.2);
+                            border: 1px solid rgba(212, 175, 55, 0.4);
+                            color: #f3e5ab;
+                            padding: 3px 7px;
+                            font-size: 0.65rem;
+                            border-radius: 6px;
+                            cursor: pointer;
+                            backdrop-filter: blur(4px);
+                            transition: 0.3s;
+                            flex-shrink: 0;
+                            font-weight: 600;
+                        " onmouseover="this.style.background='rgba(212,175,55,0.4)'" onmouseout="this.style.background='rgba(212,175,55,0.2)'">
+                            📋 <span id="btn-text">Salin</span>
+                        </button>
+                    </div>
+
+                    <p style="margin: 0; font-size: 0.6rem; color: #a89f91; letter-spacing: 0.5px; font-weight: 600;">CARD HOLDER</p>
+                    <p class="teks-timbul-atm" style="margin: 3px 0 4px 0; font-size: clamp(0.8rem, 3.5vw, 0.9rem); text-transform: uppercase; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Gede Ardy Putrawan</p>
+                </div>
+            </section>
+
+            <hr class="pembatas">
+
+            <section class="section-rsvp scroll-animasi">
+                <h3 style="font-family: 'Great Vibes', cursive; font-size: 2.5rem; text-align: center; color: #f3e5ab; margin: 0 0 5px 0;">Konfirmasi Kehadiran</h3>
+                
+                <form id="rsvp-form" action="mailto:emailanda@gmail.com" method="POST" enctype="text/plain" onsubmit="kirimRSVP(event)">
+                    <div class="rsvp-inputs">
+                        <input type="text" id="input-nama" name="Nama Tamu" placeholder="Nama Anda" required>
+                        <select id="input-status" name="Status Kehadiran" required>
+                            <option value="">-- Pilih Kehadiran --</option>
+                            <option value="Hadir">Hadir</option>
+                            <option value="Tidak Hadir">Tidak Hadir</option>
+                        </select>
+                        <textarea id="input-ucapan" name="Ucapan" placeholder="Tulis ucapan/doa di sini..." rows="3" required></textarea>
+                        <button type="submit" class="btn-submit">Kirim Konfirmasi & Doa</button>
+                    </div>
+                </form>   
+                
+                <div id="wadahKomentar" style="margin-top: 30px; padding-top: 20px; border-top: 1px solid rgba(212, 175, 55, 0.3);">
+                    <h4 style="text-align: center; color: #f3e5ab; margin: 0 0 15px 0; font-family: 'Montserrat', sans-serif; font-size: 1rem;">Riwayat Ucapan Tamu</h4>
+                    <div id="daftar-ucapan" style="max-height: 250px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; text-align: left; padding-right: 5px;">
+                        <!-- Kosong di awal agar bersih -->
+                    </div>
+                </div>
+            </section>
+            
+            <footer style="margin-top: 50px; text-align: center; color: #c4b299; font-size: 0.85rem; padding-bottom: 30px; border-top: 1px solid rgba(212, 175, 55, 0.2); padding-top: 40px;">
+                <p class="scroll-animasi" style="font-family: 'Great Vibes', cursive; font-size: 2.2rem; color: #f3e5ab; margin-bottom: 15px;">Om Shanti Shanti Shanti Om</p>
+                <p class="scroll-animasi" style="max-width: 80%; margin: 0 auto 25px auto; line-height: 1.6;">Merupakan suatu kehormatan dan kebahagiaan bagi kami atas kehadiran serta doa restu Bapak/Ibu/Saudara/i.</p>
+                
+                <h1 class="scroll-animasi" style="font-family: 'Great Vibes', cursive; font-size: 3.5rem; color: #f3e5ab; margin: 15px 0; text-shadow: 0 2px 10px rgba(212, 175, 55, 0.3);">Ardy & Ana</h1>
+                
+                <p class="scroll-animasi" style="font-size: 0.75rem; margin-top: 30px; border-top: 1px dashed rgba(212,175,55,0.2); padding-top: 20px; letter-spacing: 1px;">
+                    Created by ArdyPutrawan Sketch
+                </p>
+            </footer>
+        </div>
+    </div>
+
+    <script>
+        const music = document.getElementById('bg-music');
+        const musicBtn = document.getElementById('music-control');
+        let playPromise;
+        
+        // Array 15 galeri foto
+        const daftarGaleri = [
+            'galeri1.jpg', 'galeri2.jpg', 'galeri3.jpg', 'galeri4.jpg', 'galeri5.jpg',
+            'galeri6.jpg', 'galeri7.jpg', 'galeri8.jpg', 'galeri9.jpg', 'galeri10.jpg',
+            'galeri11.jpg', 'galeri12.jpg', 'galeri13.jpg', 'galeri14.jpg', 'galeri15.jpg'
+        ];
+        let indeksLightboxAktif = 0;
+        let modeGaleriSaja = false; 
+
+        function getGuestName() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const guestName = urlParams.get('to');
+            if (guestName) {
+                document.getElementById('nama-tamu').innerText = decodeURIComponent(guestName);
+            }
+        }
+
+        function bukaUndangan() {
+            document.getElementById('cover').classList.add('opened');
+            document.body.style.overflowY = 'auto'; 
+            
+            const mainContent = document.getElementById('main-content');
+            mainContent.classList.add('muncul-konten');
+
+            music.muted = false;
+            playPromise = music.play();
+            
+            if (playPromise !== undefined) {
+                playPromise.then(() => {
+                    musicBtn.style.animationPlayState = 'running';
+                    musicBtn.innerText = "🎵";
+                }).catch(error => {
+                    console.log("Autoplay dicegah browser:", error);
+                    musicBtn.style.animationPlayState = 'paused';
+                    musicBtn.innerText = "🔇";
+                });
+            }
+
+            mulaiAutoplayGaleri();
+            prosesParallax();
+        }
+
+        function toggleMusik() {
+            if (music.paused) { 
+                music.play(); 
+                musicBtn.style.animationPlayState = 'running'; 
+                musicBtn.innerText = "🎵"; 
+            } else { 
+                music.pause(); 
+                musicBtn.style.animationPlayState = 'paused'; 
+                musicBtn.innerText = "🔇"; 
+            }
+        }
+
+        function hitungMundur() {
+            const targetDate = new Date('December 31, 2026 09:00:00 WITA').getTime();
+            const now = new Date().getTime();
+            const selisih = targetDate - now;
+
+            if (selisih <= 0) {
+                document.getElementById('days').innerText = '00';
+                document.getElementById('hours').innerText = '00';
+                document.getElementById('minutes').innerText = '00';
+                document.getElementById('seconds').innerText = '00';
+                return;
+            }
+
+            const hari = Math.floor(selisih / (1000 * 60 * 60 * 24));
+            const jam = Math.floor((selisih % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const menit = Math.floor((selisih % (1000 * 60 * 60)) / (1000 * 60));
+            const detik = Math.floor((selisih % (1000 * 60)) / 1000);
+
+            document.getElementById('days').innerText = hari < 10 ? '0' + hari : hari;
+            document.getElementById('hours').innerText = jam < 10 ? '0' + jam : jam;
+            document.getElementById('minutes').innerText = menit < 10 ? '0' + menit : menit;
+            document.getElementById('seconds').innerText = detik < 10 ? '0' + detik : detik;
+        }
+        setInterval(hitungMundur, 1000);
+
+        function prosesParallax() {
+            const posScroll = window.scrollY || window.pageYOffset;
+
+            const targetAnimasi = document.querySelectorAll('.scroll-animasi');
+            targetAnimasi.forEach(elemen => {
+                const batasAtas = elemen.getBoundingClientRect().top;
+                const tinggiLayar = window.innerHeight * 0.9;
+                if (batasAtas < tinggiLayar) {
+                    elemen.classList.add('muncul');
+                }
+            });
+
+            const itemUkiran = document.querySelectorAll('.ukiran-bunga-bali');
+            itemUkiran.forEach(ukiran => {
+                const kelajuan = parseFloat(ukiran.getAttribute('data-speed'));
+                const offset = posScroll * kelajuan;
+                const putaran = (posScroll * 0.02 * kelajuan);
+                
+                const balikKanan = ukiran.classList.contains('ub-top-right') || ukiran.classList.contains('ub-bot-right');
+                const cermin = balikKanan ? 'scaleX(-1) ' : '';
+
+                ukiran.style.transform = `${cermin}translateY(${offset}px) rotate(${putaran}deg)`;
+            });
+        }
+
+        window.addEventListener('scroll', prosesParallax);
+        window.addEventListener('load', () => { getGuestName(); prosesParallax(); });
+
+        const slider = document.getElementById('sliderGaleri');
+        let intervalAutoplay;
+
+        function geserGaleri(arah) {
+            const itemWidth = slider.querySelector('.galeri-item').clientWidth + 15;
+            slider.scrollBy({ left: arah * itemWidth, behavior: 'smooth' });
+        }
+
+        function lompatKeFoto(indeks) {
+            const itemWidth = slider.querySelector('.galeri-item').clientWidth + 15;
+            slider.scrollTo({ left: indeks * itemWidth, behavior: 'smooth' });
+        }
+
+        function perbaruiTitikIndikator() {
+            const dots = document.querySelectorAll('.dot');
+            const itemWidth = slider.querySelector('.galeri-item').clientWidth + 15;
+            const indeksAktif = Math.round(slider.scrollLeft / itemWidth);
+            dots.forEach((dot, idx) => {
+                if (idx === indeksAktif) dot.classList.add('active');
+                else dot.classList.remove('active');
+            });
+        }
+
+        function mulaiAutoplayGaleri() {
+            intervalAutoplay = setInterval(() => {
+                const itemWidth = slider.querySelector('.galeri-item').clientWidth + 15;
+                const totalFoto = slider.querySelectorAll('.galeri-item').length;
+                const indeksAktif = Math.round(slider.scrollLeft / itemWidth);
+
+                if (indeksAktif >= totalFoto - 1) {
+                    slider.scrollTo({ left: 0, behavior: 'smooth' });
+                } else {
+                    slider.scrollBy({ left: itemWidth, behavior: 'smooth' });
+                }
+            }, 4000);
+        }
+        slider.addEventListener('touchstart', () => clearInterval(intervalAutoplay));
+
+        function bukaSingleLightbox(src) {
+            modeGaleriSaja = false;
+            document.querySelectorAll('.lightbox-arrow').forEach(p => p.style.display = 'none');
+            const overlay = document.getElementById('lightbox-overlay');
+            const img = document.getElementById('lightbox-img');
+            img.src = src;
+            overlay.classList.add('active');
+        }
+
+        function bukaGaleriLightbox(indeks) {
+            modeGaleriSaja = true;
+            indeksLightboxAktif = indeks;
+            document.querySelectorAll('.lightbox-arrow').forEach(p => p.style.display = 'flex');
+            tampilkanFotoLightbox();
+            document.getElementById('lightbox-overlay').classList.add('active');
+        }
+
+        function tampilkanFotoLightbox() {
+            const img = document.getElementById('lightbox-img');
+            img.style.opacity = '0';
+            setTimeout(() => {
+                img.src = daftarGaleri[indeksLightboxAktif];
+                img.style.opacity = '1';
+            }, 150);
+        }
+
+        function navigasiLightbox(arah, event) {
+            event.stopPropagation(); 
+            if (!modeGaleriSaja) return;
+            indeksLightboxAktif += arah;
+            if (indeksLightboxAktif >= daftarGaleri.length) indeksLightboxAktif = 0;
+            if (indeksLightboxAktif < 0) indeksLightboxAktif = daftarGaleri.length - 1;
+            tampilkanFotoLightbox();
+        }
+
+        function tutupFoto() {
+            document.getElementById('lightbox-overlay').classList.remove('active');
+        }
+
+        function tutupFotoLuar(event) {
+            if (event.target.id === 'lightbox-overlay' || event.target.className === 'lightbox-container') {
+                tutupFoto();
+            }
+        }
+
+        let sentuhanAwalX = 0;
+        document.getElementById('lightbox-overlay').addEventListener('touchstart', e => {
+            sentuhanAwalX = e.changedTouches[0].screenX;
+        });
+        document.getElementById('lightbox-overlay').addEventListener('touchend', e => {
+            if (!modeGaleriSaja) return;
+            let sentuhanAkhirX = e.changedTouches[0].screenX;
+            if (sentuhanAwalX - sentuhanAkhirX > 50) navigasiLightbox(1, e);  
+            if (sentuhanAkhirX - sentuhanAwalX > 50) navigasiLightbox(-1, e); 
+        });
+
+        function copyNoRek() {
+            const noRekAsli = "0570205000041"; 
+            const textArea = document.createElement("textarea");
+            textArea.value = noRekAsli;
+            document.body.appendChild(textArea);
+            textArea.select();
+            
+            try {
+                document.execCommand('copy');
+                const btnText = document.getElementById('btn-text');
+                btnText.innerText = "Tersalin!";
+                setTimeout(() => { btnText.innerText = "Salin"; }, 2000);
+            } catch (err) {
+                console.error('Gagal menyalin: ', err);
+            }
+            document.body.removeChild(textArea);
+        }
+
+        function salinAlamat() {
+            const alamatTeks = document.getElementById('alamat-lokasi').innerText;
+            const textArea = document.createElement("textarea");
+            textArea.value = alamatTeks;
+            document.body.appendChild(textArea);
+            textArea.select();
+            try {
+                document.execCommand('copy');
+                const btnText = document.getElementById('btn-alamat-text');
+                btnText.innerText = "Alamat Tersalin!";
+                setTimeout(() => { btnText.innerText = "Salin Alamat"; }, 2000);
+            } catch(err) {
+                console.error('Gagal menyalin alamat', err);
+            }
+            document.body.removeChild(textArea);
+        }
+
+        function kirimRSVP(event) {
+            event.preventDefault();
+            const nama = document.getElementById('input-nama').value;
+            const status = document.getElementById('input-status').value;
+            const ucapan = document.getElementById('input-ucapan').value;
+
+            const wadahDaftar = document.getElementById('daftar-ucapan');
+            const elemenBaru = document.createElement('div');
+            elemenBaru.style.cssText = "background: rgba(30,22,17,0.6); padding: 12px; border-radius: 8px; border-left: 3px solid #d4af37; animation: fadeIn 0.5s ease;";
+            elemenBaru.innerHTML = `
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                    <strong style="font-size: 0.9rem; color: #f3e5ab;">${nama}</strong>
+                    <span style="font-size: 0.7rem; background: rgba(212,175,55,0.2); padding: 2px 6px; border-radius: 4px; color: #fff;">${status}</span>
+                </div>
+                <p style="font-size: 0.85rem; color: #c4b299; margin: 0;">${ucapan}</p>
+            `;
+
+            wadahDaftar.prepend(elemenBaru);
+            document.getElementById('rsvp-form').reset();
+        }
+    </script>
+</body>
+</html>
