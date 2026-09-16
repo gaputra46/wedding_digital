@@ -437,8 +437,8 @@
 
             <section class="section-galeri scroll-animasi">
                 <h3 style="font-family: 'Great Vibes', cursive; font-size: 2.5rem; color: #f3e5ab; margin: 0 0 5px 0;">Galeri Kebersamaan</h3>
-                <p style="font-size: 0.8rem; color: #c4b299; margin: 0 0 5px 0;">Kisah cinta dalam bingkai potret kebahagiaan kami (15 Foto)</p>
-                <p style="font-size: 0.7rem; color: #d4af37; font-style: italic; margin: 0;">(Sangat cocok untuk foto landscape/mendatar)</p>
+                <p style="font-size: 0.8rem; color: #c4b299; margin: 0 0 5px 0;">Kisah cinta dalam bingkai potret kebahagiaan kami</p>
+                <p style="font-size: 0.7rem; color: #d4af37; font-style: italic; margin: 0;">(15 foto)</p>
 
                 <div class="galeri-wrapper">
                     <button class="slide-btn btn-left" onclick="geserGaleri(-1)">❮</button>
@@ -546,7 +546,7 @@
             <section class="section-rsvp scroll-animasi">
                 <h3 style="font-family: 'Great Vibes', cursive; font-size: 2.5rem; text-align: center; color: #f3e5ab; margin: 0 0 5px 0;">Konfirmasi Kehadiran</h3>
                 
-                <form id="rsvp-form" action="mailto:deardy2008@gmail.com" method="POST" enctype="text/plain" onsubmit="kirimRSVP(event)">
+                <form id="rsvp-form" onsubmit="kirimRSVP(event)">
                     <div class="rsvp-inputs">
                         <input type="text" id="input-nama" name="Nama Tamu" placeholder="Nama Anda" required>
                         <select id="input-status" name="Status Kehadiran" required>
@@ -821,26 +821,70 @@
             document.body.removeChild(textArea);
         }
 
+                // Ganti URL di bawah ini dengan Web App URL dari Google Script kamu
+        const scriptURL = 'MASUKKAN_URL_WEB_APP_GOOGLE_SHEET_DISINI';
+
         function kirimRSVP(event) {
             event.preventDefault();
-            const nama = document.getElementById('input-nama').value;
-            const status = document.getElementById('input-status').value;
-            const ucapan = document.getElementById('input-ucapan').value;
+            const form = document.getElementById('rsvp-form');
+            const btnSubmit = form.querySelector('.btn-submit');
+            btnSubmit.innerText = "Mengirim...";
+            btnSubmit.disabled = true;
 
-            const wadahDaftar = document.getElementById('daftar-ucapan');
-            const elemenBaru = document.createElement('div');
-            elemenBaru.style.cssText = "background: rgba(30,22,17,0.6); padding: 12px; border-radius: 8px; border-left: 3px solid #d4af37; animation: fadeIn 0.5s ease;";
-            elemenBaru.innerHTML = `
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
-                    <strong style="font-size: 0.9rem; color: #f3e5ab;">${nama}</strong>
-                    <span style="font-size: 0.7rem; background: rgba(212,175,55,0.2); padding: 2px 6px; border-radius: 4px; color: #fff;">${status}</span>
-                </div>
-                <p style="font-size: 0.85rem; color: #c4b299; margin: 0;">${ucapan}</p>
-            `;
+            const formData = new URLSearchParams();
+            formData.append('Nama', document.getElementById('input-nama').value);
+            formData.append('Status', document.getElementById('input-status').value);
+            formData.append('Ucapan', document.getElementById('input-ucapan').value);
 
-            wadahDaftar.prepend(elemenBaru);
-            document.getElementById('rsvp-form').reset();
+            fetch(scriptURL, { method: 'POST', body: formData })
+                .then(response => {
+                    alert('Konfirmasi dan ucapan berhasil dikirim!');
+                    form.reset();
+                    btnSubmit.innerText = "Kirim Konfirmasi & Doa";
+                    btnSubmit.disabled = false;
+                    muatRiwayatUcapan(); // Memuat ulang daftar ucapan dari sheet
+                })
+                .catch(error => {
+                    console.error('Error!', error.message);
+                    alert('Gagal mengirim, silakan coba lagi.');
+                    btnSubmit.innerText = "Kirim Konfirmasi & Doa";
+                    btnSubmit.disabled = false;
+                });
         }
+
+        // Fungsi opsional untuk menarik data riwayat ucapan dari Google Sheet agar tampil di bawah
+        function muatRiwayatUcapan() {
+            if (scriptURL === 'MASUKKAN_URL_WEB_APP_GOOGLE_SHEET_DISINI') return;
+            
+            fetch(scriptURL)
+                .then(res => res.json())
+                .then(data => {
+                    const wadahDaftar = document.getElementById('daftar-ucapan');
+                    wadahDaftar.innerHTML = ''; // Bersihkan kontainer
+                    
+                    // Balik urutan agar yang terbaru di atas
+                    data.reverse().forEach(row => {
+                        if(!row.Nama) return;
+                        const elemenBaru = document.createElement('div');
+                        elemenBaru.style.cssText = "background: rgba(30,22,17,0.6); padding: 12px; border-radius: 8px; border-left: 3px solid #d4af37;";
+                        elemenBaru.innerHTML = `
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                                <strong style="font-size: 0.9rem; color: #f3e5ab;">${row.Nama}</strong>
+                                <span style="font-size: 0.7rem; background: rgba(212,175,55,0.2); padding: 2px 6px; border-radius: 4px; color: #fff;">${row.Status || 'Hadir'}</span>
+                            </div>
+                            <p style="font-size: 0.85rem; color: #c4b299; margin: 0;">${row.Ucapan}</p>
+                        `;
+                        wadahDaftar.appendChild(elemenBaru);
+                    });
+                })
+                .catch(err => console.log('Gagal memuat riwayat:', err));
+        }
+
+        // Panggil fungsi ini saat halaman pertama kali dibuka agar riwayat langsung muncul
+        window.addEventListener('load', () => {
+            muatRiwayatUcapan();
+        });
+
     </script>
 </body>
 </html>
